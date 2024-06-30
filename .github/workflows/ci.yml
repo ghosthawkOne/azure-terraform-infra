@@ -1,0 +1,20 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  execute-terraform-plan:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-22.04
+
+  execute-terraform-apply:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    runs-on: ubuntu-22.04
