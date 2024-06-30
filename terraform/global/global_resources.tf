@@ -15,5 +15,7 @@ resource "azurerm_virtual_network" "vnet-dev" {
   ]
   resource_group_name = azurerm_resource_group.dev-rg.name
   location = azurerm_resource_group.dev-rg.location
-  tags = merge(azurerm_resource_group.dev-rg.tags, {})
+  tags = merge(azurerm_resource_group.dev-rg.tags, {
+    "OwningProjects" = "All"
+  })
 }
