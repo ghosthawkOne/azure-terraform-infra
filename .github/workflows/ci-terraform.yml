@@ -31,7 +31,7 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v2.1.4
         with:
           tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT.VERSION }}
+          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
 
   execute-terraform-apply:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -49,4 +49,4 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v2.1.4
         with:
           tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT.VERSION }}
+          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
