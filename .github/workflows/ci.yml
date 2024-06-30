@@ -14,7 +14,17 @@ jobs:
   execute-terraform-plan:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
   execute-terraform-apply:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
