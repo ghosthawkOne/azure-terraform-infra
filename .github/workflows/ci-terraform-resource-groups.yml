@@ -38,7 +38,7 @@ jobs:
           sudo unzip -o terraform.zip -d /usr/local/bin/
       - name: Download and install terragrunt
         run:
-          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ var.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ vars.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
           chmod +x terragrunt
           sudo install terragrunt /usr/local/bin/
       - name: Verify terragrunt and terraform versions
