@@ -33,12 +33,14 @@ jobs:
           azcliversion: latest
           inlineScript: az account show
       - name: Download and install terraform
-        run:
+        run: |
           terraform_version="${{ vars.TERRAFORM_VERSION }}"
-          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"$terraform_version"/terraform_"$terraform_version"_linux_amd64.zip;
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"$terraform_version"/terraform_"$terraform_version"_linux_amd64.zip
+          sudo unzip -o terraform.zip -d /usr/local/bin/
       - name: Download and install terragrunt
-        run:
-          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ vars.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+        run: |
+          terragrunt_version="${{ vars.TERRAGRUNT_VERSION }}"
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v"$terragrunt_version"/terragrunt_linux_amd64
           chmod +x terragrunt
           sudo install terragrunt /usr/local/bin/
       - name: Verify terragrunt and terraform versions
