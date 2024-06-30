@@ -116,19 +116,8 @@ jobs:
         uses: azure/login@v2.1.1
         with:
           creds: ${{ secrets.ARM_CREDENTIALS }}
-      - name: Setup Terraform and Terragrunt
-        uses: gruntwork-io/terragrunt-action@v2.1.4
+      - name: Install azure cli
+        uses: azure/cli@v2
         with:
-          tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
-      - name: Setup Terraform and Terragrunt
-        uses: gruntwork-io/terragrunt-action@v2.1.4
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        with:
-          tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
-          tg_command: apply
-          tg_dir: terraform/global
-          tg_add_approve: 1
+          azcliversion: latest
+          inlineScript: az account show
