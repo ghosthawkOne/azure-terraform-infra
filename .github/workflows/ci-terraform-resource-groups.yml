@@ -32,7 +32,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: az account show
-      - name: Setup Terraform and Terragrunt
+      - name: Terragrunt init
         uses: gruntwork-io/terragrunt-action@v2.1.4
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -46,10 +46,20 @@ jobs:
           tg_version: ${{ vars.TERRAGRUNT_VERSION }}
           tg_command: init
           tg_dir: terraform/global
-      - name: Execute terragrunt plan
-        working-directory: terraform/global
-        run: |
-          terragrunt plan -no-color 2>&1
+      - name: Terragrunt plan
+        uses: gruntwork-io/terragrunt-action@v2.1.4
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        with:
+          tf_version: ${{ vars.TERRAFORM_VERSION }}
+          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
+          tg_command: plan
+          tg_dir: terraform/global
 
   execute-terraform-apply:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
