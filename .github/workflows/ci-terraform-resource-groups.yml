@@ -89,7 +89,6 @@ jobs:
             <summary>Show Diff</summary>\n\n
             </details>
 
-
             \`\`\`diff\n
 
             ${diffContents}
