@@ -1,0 +1,123 @@
+name: Terraform CI For Global Resources
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '*'
+    paths:
+      - terraform/global/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - terraform/global/**
+
+jobs:
+  execute-terraform-plan:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Authenticate with Azure
+        uses: azure/login@v2.1.1
+        with:
+          creds: ${{ secrets.ARM_CREDENTIALS }}
+      - name: Install azure cli
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: az account show
+      - name: Download and install terraform
+        run: |
+          terraform_version="${{ vars.TERRAFORM_VERSION }}"
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"$terraform_version"/terraform_"$terraform_version"_linux_amd64.zip
+          sudo unzip -o terraform.zip -d /usr/local/bin/
+      - name: Download and install terragrunt
+        run: |
+          terragrunt_version="${{ vars.TERRAGRUNT_VERSION }}"
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v"$terragrunt_version"/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo install terragrunt /usr/local/bin/
+      - name: Verify terragrunt and terraform versions
+        run: |
+          terraform version
+          terragrunt --version
+      - name: Execute Terragrunt init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        working-directory: terraform/global
+        run: |
+          terragrunt init
+      - name: Execute Terragrunt plan
+        id: plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        working-directory: terraform/global
+        run: |
+          outfile=$(mktemp)
+          terragrunt plan -no-color 2>&1 | tee -a $outfile
+          echo "TERRA_DIFF=$outfile" >> $GITHUB_OUTPUT
+      - name: Post diff to PR as comment
+        uses: actions/github-script@v7.0.1
+        env:
+          TERRA_DIFF: ${{ steps.plan.outputs.TERRA_DIFF }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const fs = require('fs');
+
+            let diffContents = fs.readFileSync(process.env.TERRA_DIFF).toString();
+
+            let output = `
+            ### Helmfile Diff\n
+            <details>
+            <summary>Show Diff</summary>\n\n
+            </details>
+
+
+            \`\`\`diff\n
+
+            ${diffContents}
+
+            \`\`\`
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+  execute-terraform-apply:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Authenticate with Azure
+        uses: azure/login@v2.1.1
+        with:
+          creds: ${{ secrets.ARM_CREDENTIALS }}
+      - name: Install azure cli
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: az account show
