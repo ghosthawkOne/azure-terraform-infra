@@ -4,6 +4,7 @@ resource "azurerm_resource_group" "dev-rg" {
   tags = {
     "Environment" = "dev"
     "CreatedByTerraform" = "true"
+    "OwningProjects" = "All"
   }
 }
 
