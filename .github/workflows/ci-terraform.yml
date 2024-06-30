@@ -6,9 +6,13 @@ on:
       - main
     tags-ignore:
       - '*'
+    paths:
+      - terraform/**
   pull_request:
     branches:
       - main
+    paths:
+      - terraform/**
 
 jobs:
   execute-terraform-plan:
