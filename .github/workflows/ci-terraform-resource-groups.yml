@@ -44,7 +44,7 @@ jobs:
         with:
           tf_version: ${{ vars.TERRAFORM_VERSION }}
           tg_version: ${{ vars.TERRAGRUNT_VERSION }}
-          tg_command: plan
+          tg_command: init
           tg_dir: terraform/global
 
   execute-terraform-apply:
