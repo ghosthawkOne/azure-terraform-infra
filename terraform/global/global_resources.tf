@@ -23,7 +23,7 @@ resource "azurerm_public_ip" "ip-dev" {
   allocation_method = "Static"
   resource_group_name = azurerm_resource_group.dev-rg.name
   name = "ip-dev"
-  location = azurerm_resource_group.dev-rg.name
+  location = azurerm_resource_group.dev-rg.location
   tags = azurerm_resource_group.dev-rg.tags
 }
 
