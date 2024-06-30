@@ -22,10 +22,7 @@ jobs:
       - name: Authenticate with Azure
         uses: azure/login@v2.1.1
         with:
-          client-id: ${{ secrets.ARM_CLIENT_ID }}
-          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          tenant-id: ${{ secrets.ARM_TENANT_ID }}
-          auth-type: SERVICE_PRINCIPAL
+          creds: ${{ secrets.ARM_CREDENTIALS }}
 
   execute-terraform-apply:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
