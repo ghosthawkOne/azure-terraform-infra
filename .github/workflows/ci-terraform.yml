@@ -35,6 +35,7 @@ jobs:
           curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip
           sudo unzip -o terraform.zip -d /usr/local/bin/
           sudo curl -Lo /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${tg_version}/terragrunt_linux_amd64
+          sudo chmod +x /usr/local/bin/terragrunt
       - name: Execute Terragrunt Plan
         working-directory: terraform
         id: terragrunt-plan
@@ -66,3 +67,4 @@ jobs:
           curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip
           sudo unzip -o terraform.zip -d /usr/local/bin/
           sudo curl -Lo /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${tg_version}/terragrunt_linux_amd64
+          sudo chmod +x /usr/local/bin/terragrunt
