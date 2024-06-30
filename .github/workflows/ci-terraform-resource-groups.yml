@@ -69,7 +69,7 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         working-directory: terraform/global
         run: |
-          outfile=$mktemp
+          outfile=$(mktemp)
           terragrunt plan -no-color 2>&1 | tee -a $outfile
           echo "TERRA_DIFF=$outfile" >> $GITHUB_OUTPUT
       - name: Post diff to PR as comment
