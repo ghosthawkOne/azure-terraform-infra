@@ -29,8 +29,8 @@ jobs:
           creds: ${{ secrets.ARM_CREDENTIALS }}
       - name: Setup Terraform and Terragrunt
         run: |
-          tf_version="${{ env.TERRAFORM_VERSION }}"
-          tg_version="${{ env.TERRAGRUNT_VERSION }}"
+          tf_version="${{ vars.TERRAFORM_VERSION }}"
+          tg_version="${{ vars.TERRAGRUNT_VERSION }}"
 
           curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip
           unzip terraform.zip -d /usr/local/bin/
@@ -60,8 +60,8 @@ jobs:
           creds: ${{ secrets.ARM_CREDENTIALS }}
       - name: Setup Terraform and Terragrunt
         run: |
-          tf_version="${{ env.TERRAFORM_VERSION }}"
-          tg_version="${{ env.TERRAGRUNT_VERSION }}"
+          tf_version="${{ vars.TERRAFORM_VERSION }}"
+          tg_version="${{ vars.TERRAGRUNT_VERSION }}"
 
           curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip
           unzip terraform.zip -d /usr/local/bin/
