@@ -25,6 +25,7 @@ resource "azurerm_public_ip" "ip-dev" {
   name = "ip-dev"
   location = azurerm_resource_group.dev-rg.location
   tags = azurerm_resource_group.dev-rg.tags
+  sku = "Standard"
 }
 
 resource "azurerm_nat_gateway" "ng-dev" {
