@@ -1,4 +1,8 @@
-resource "azurerm_resource_group" "example" {
-  name     = "dev"
+resource "azurerm_resource_group" "dev-rg" {
+  name     = "dev-rg"
   location = "Central India"
+  tags = {
+    "Environment" = "dev"
+    "CreatedByTerraform" = "true"
+  }
 }
