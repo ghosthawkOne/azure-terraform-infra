@@ -117,3 +117,40 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: az account show
+      - name: Download and install terraform
+        run: |
+          terraform_version="${{ vars.TERRAFORM_VERSION }}"
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"$terraform_version"/terraform_"$terraform_version"_linux_amd64.zip
+          sudo unzip -o terraform.zip -d /usr/local/bin/
+      - name: Download and install terragrunt
+        run: |
+          terragrunt_version="${{ vars.TERRAGRUNT_VERSION }}"
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v"$terragrunt_version"/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo install terragrunt /usr/local/bin/
+      - name: Verify terragrunt and terraform versions
+        run: |
+          terraform version
+          terragrunt --version
+      - name: Execute Terragrunt init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        working-directory: terraform/global
+        run: |
+          terragrunt init
+      - name: Execute Terragrunt apply
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        working-directory: terraform/global
+        run: |
+          terragrunt apply -auto-approve
