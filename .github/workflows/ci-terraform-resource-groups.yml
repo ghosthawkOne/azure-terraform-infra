@@ -34,8 +34,8 @@ jobs:
           inlineScript: az account show
       - name: Download and install terraform
         run:
-          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${{ vars.TERRAFORM_VERSION }}/terraform_${{ vars.TERRAFORM_VERSION }}_linux_amd64.zip
-          sudo unzip -o terraform.zip -d /usr/local/bin/
+          terraform_version="${{ vars.TERRAFORM_VERSION }}"
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"$terraform_version"/terraform_"$terraform_version"_linux_amd64.zip;
       - name: Download and install terragrunt
         run:
           curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ vars.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
