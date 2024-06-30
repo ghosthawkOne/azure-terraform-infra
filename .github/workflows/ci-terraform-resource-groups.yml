@@ -27,6 +27,10 @@ jobs:
         uses: azure/login@v2.1.1
         with:
           creds: ${{ secrets.ARM_CREDENTIALS }}
+      - name: Install azure cli
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
       - name: Setup Terraform and Terragrunt
         uses: gruntwork-io/terragrunt-action@v2.1.4
         env:
