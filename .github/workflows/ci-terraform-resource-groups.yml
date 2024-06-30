@@ -85,9 +85,6 @@ jobs:
 
             let output = `
             ### Helmfile Diff\n
-            <details>
-            <summary>Show Diff</summary>\n\n
-            </details>
 
             \`\`\`diff\n
 
