@@ -32,34 +32,19 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: az account show
-      - name: Terragrunt init
-        uses: gruntwork-io/terragrunt-action@v2.1.4
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        with:
-          tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
-          tg_command: init
-          tg_dir: terraform/global
-      - name: Terragrunt plan
-        uses: gruntwork-io/terragrunt-action@v2.1.4
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        with:
-          tf_version: ${{ vars.TERRAFORM_VERSION }}
-          tg_version: ${{ vars.TERRAGRUNT_VERSION }}
-          tg_command: plan
-          tg_dir: terraform/global
+      - name: Download and install terraform
+        run:
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/${{ vars.TERRAFORM_VERSION }}/terraform_${{ vars.TERRAFORM_VERSION }}_linux_amd64.zip
+          sudo unzip -o terraform.zip -d /usr/local/bin/
+      - name: Download and install terragrunt
+        run:
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ var.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo install terragrunt /usr/local/bin/
+      - name: Verify terragrunt and terraform versions
+        run: |
+          terraform version
+          terragrunt --version
 
   execute-terraform-apply:
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
