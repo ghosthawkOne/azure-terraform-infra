@@ -33,6 +33,7 @@ resource "azurerm_nat_gateway" "ng-dev" {
   resource_group_name = azurerm_resource_group.dev-rg.name
   location = azurerm_resource_group.dev-rg.location
   tags = azurerm_resource_group.dev-rg.tags
+  sku_name = "Standard"
 }
 
 resource "azurerm_nat_gateway_public_ip_association" "ng-dev-associate-public-ip" {
