@@ -68,6 +68,7 @@ resource "azurerm_network_security_rule" "nsg-jumpbox-allow-ssh" {
   destination_port_range = "22"
   source_port_range = "*"
   source_address_prefix = "*"
+  destination_address_prefix = format("%s/%s", azurerm_public_ip.ip-jumpbox.ip_address, "32")
 }
 
 resource "azurerm_network_interface_security_group_association" "assoc-nif-sg-jumpbox" {
