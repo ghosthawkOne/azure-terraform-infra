@@ -41,6 +41,10 @@ resource "azurerm_linux_virtual_machine" "jumpbox" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+  tags = {
+    "Stop" = "True"
+    "Start" = "True"
+  }
 }
 
 resource "cloudflare_record" "jumpbox-dns" {
