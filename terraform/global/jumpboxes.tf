@@ -50,3 +50,30 @@ resource "cloudflare_record" "jumpbox-dns" {
   proxied = false
   value = azurerm_public_ip.ip-jumpbox.ip_address
 }
+
+resource "azurerm_network_security_group" "nsg-jumpbox" {
+  name = "nsg-jumpbox"
+  resource_group_name = azurerm_resource_group.dev-rg.name
+  location = azurerm_resource_group.dev-rg.location
+}
+
+resource "azurerm_network_security_rule" "nsg-jumpbox-allow-ssh" {
+  protocol = "Tcp"
+  direction = "Inbound"
+  name = "Allow Incoming SSH"
+  access = "Allow"
+  network_security_group_name = azurerm_network_security_group.nsg-jumpbox.name
+  resource_group_name = azurerm_resource_group.dev-rg.name
+  priority = "101"
+  destination_port_range = "22"
+}
+
+resource "azurerm_network_interface_security_group_association" "assoc-nif-sg-jumpbox" {
+  network_interface_id = azurerm_network_interface.nif-jumpbox.id
+  network_security_group_id = azurerm_network_security_group.nsg-jumpbox.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "name" {
+  subnet_id = azurerm_subnet.subnet-pub-dev-01.id
+  network_security_group_id = azurerm_network_security_group.nsg-jumpbox.id
+}
