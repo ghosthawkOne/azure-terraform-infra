@@ -60,15 +60,15 @@ resource "azurerm_network_security_group" "nsg-jumpbox" {
 resource "azurerm_network_security_rule" "nsg-jumpbox-allow-ssh" {
   protocol = "Tcp"
   direction = "Inbound"
-  name = "jumpbox-allow-incoming-ssh"
+  name = "AllowAnyInboundSSH"
   access = "Allow"
   network_security_group_name = azurerm_network_security_group.nsg-jumpbox.name
   resource_group_name = azurerm_resource_group.dev-rg.name
-  priority = "101"
+  priority = "999"
   destination_port_range = "22"
   source_port_range = "*"
   source_address_prefix = "*"
-  destination_address_prefix = format("%s/%s", azurerm_public_ip.ip-jumpbox.ip_address, "32")
+  destination_address_prefix = "*"
 }
 
 resource "azurerm_network_interface_security_group_association" "assoc-nif-sg-jumpbox" {
