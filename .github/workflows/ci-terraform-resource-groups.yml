@@ -84,7 +84,7 @@ jobs:
             let diffContents = fs.readFileSync(process.env.TERRA_DIFF).toString();
 
             let output = `
-            ### Helmfile Diff\n
+            ### Terragrunt diff\n
 
             \`\`\`diff\n
 
