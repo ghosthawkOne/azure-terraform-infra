@@ -60,7 +60,7 @@ resource "azurerm_network_security_group" "nsg-jumpbox" {
 resource "azurerm_network_security_rule" "nsg-jumpbox-allow-ssh" {
   protocol = "Tcp"
   direction = "Inbound"
-  name = "Allow Incoming SSH"
+  name = "jumpbox-allow-incoming-ssh"
   access = "Allow"
   network_security_group_name = azurerm_network_security_group.nsg-jumpbox.name
   resource_group_name = azurerm_resource_group.dev-rg.name
