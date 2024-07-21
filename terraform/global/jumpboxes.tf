@@ -3,6 +3,7 @@ resource "azurerm_public_ip" "ip-jumpbox" {
   location = azurerm_resource_group.dev-rg.location
   allocation_method = "Static"
   name = "ip-address-jumpbox"
+  sku = "Standard"
 }
 
 resource "azurerm_network_interface" "nif-jumpbox" {
