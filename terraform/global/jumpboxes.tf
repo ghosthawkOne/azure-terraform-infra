@@ -45,6 +45,12 @@ resource "azurerm_linux_virtual_machine" "jumpbox" {
     "Stop" = "True"
     "Start" = "True"
   }
+  lifecycle {
+    ignore_changes = [
+      tags["Stop"],
+      tags["Start"]
+    ]
+  }
 }
 
 resource "cloudflare_record" "jumpbox-dns" {
