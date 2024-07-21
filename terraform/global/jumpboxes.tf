@@ -42,3 +42,9 @@ resource "azurerm_linux_virtual_machine" "jumpbox" {
     version   = "latest"
   }
 }
+
+resource "cloudflare_record" "jumpbox-dns" {
+  type = "A"
+  name = azurerm_linux_virtual_machine.jumpbox.name
+  zone_id = "72b99a897ca7debf9e960abcbab1c124"
+}
