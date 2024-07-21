@@ -17,3 +17,22 @@ resource "azurerm_network_interface" "nif-jumpbox" {
     subnet_id = azurerm_subnet.subnet-pub-dev-01.id
   }
 }
+
+resource "azurerm_linux_virtual_machine" "jumpbox" {
+  admin_ssh_key {
+    public_key = azurerm_ssh_public_key.ssh-pub-key.public_key
+    username = "servrfarmer"
+  }
+  admin_username = "servrfarmer"
+  computer_name = "jumpbox.servrfarm.tech"
+  name = "jumpbox"
+  disable_password_authentication = true
+  resource_group_name = azurerm_resource_group.dev-rg.name
+  location = azurerm_resource_group.dev-rg.location
+  size = "Standard_B2ms"
+  network_interface_ids = [azurerm_network_interface.nif-jumpbox.id]
+  os_disk {
+    caching = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+}
