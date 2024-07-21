@@ -48,4 +48,5 @@ resource "cloudflare_record" "jumpbox-dns" {
   name = azurerm_linux_virtual_machine.jumpbox.name
   zone_id = "72b99a897ca7debf9e960abcbab1c124"
   proxied = false
+  value = azurerm_public_ip.ip-jumpbox.ip_address
 }
