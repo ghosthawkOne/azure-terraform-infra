@@ -13,7 +13,7 @@ resource "azurerm_network_interface" "nif-jumpbox" {
   ip_configuration {
     public_ip_address_id = azurerm_public_ip.ip-jumpbox.id
     name = "nif-jumpbox-public-ip-cfg"
-    private_ip_address_allocation = "Static"
+    private_ip_address_allocation = "Dynamic"
     subnet_id = azurerm_subnet.subnet-pub-dev-01.id
   }
 }
