@@ -67,6 +67,7 @@ resource "azurerm_network_security_rule" "nsg-jumpbox-allow-ssh" {
   priority = "101"
   destination_port_range = "22"
   source_port_range = "*"
+  source_address_prefix = "*"
 }
 
 resource "azurerm_network_interface_security_group_association" "assoc-nif-sg-jumpbox" {
