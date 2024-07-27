@@ -97,7 +97,7 @@ resource "azurerm_network_security_rule" "ngs-jumpbox-allow-443" {
 
 resource "azurerm_network_security_rule" "ngs-jumpbox-allow-80" {
   access = "Allow"
-  priority = "1000"
+  priority = "1001"
   name = "AllowAnyInbound80"
   resource_group_name = azurerm_resource_group.dev-rg.name
   protocol = "Tcp"
