@@ -29,7 +29,7 @@ resource "azurerm_linux_virtual_machine" "jumpbox" {
   disable_password_authentication = true
   resource_group_name = azurerm_resource_group.dev-rg.name
   location = azurerm_resource_group.dev-rg.location
-  size = "Standard_B2ms"
+  size = "Standard_B2as"
   network_interface_ids = [azurerm_network_interface.nif-jumpbox.id]
   os_disk {
     caching = "ReadWrite"
