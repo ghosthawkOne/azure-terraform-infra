@@ -90,7 +90,7 @@ resource "azurerm_linux_virtual_machine" "dev-box" {
   name = "dev-box.servrfarm.tech"
   size = "Standard_D2as_v5"
   os_disk {
-    disk_size_gb = 8
+    disk_size_gb = 32
     caching = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
