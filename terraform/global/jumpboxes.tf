@@ -84,7 +84,7 @@ resource "azurerm_linux_virtual_machine" "dev-box" {
   ]
   admin_username = "farmer"
   admin_ssh_key {
-    public_key = azurerm_ssh_public_key.ssh-pub-key
+    public_key = azurerm_ssh_public_key.ssh-pub-key.public_key
     username = "farmer"
   }
   name = "dev-box.servrfarm.tech"
