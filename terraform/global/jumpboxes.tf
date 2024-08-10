@@ -117,3 +117,27 @@ resource "azurerm_virtual_machine_data_disk_attachment" "attach-dev-box-storage-
   lun = 10
   caching = "ReadWrite"
 }
+
+variable "cloudflare_zone_id" {
+  type = string
+  sensitive = true
+  description = "Cloudflare Zone ID"
+  nullable = false
+}
+
+resource "cloudflare_record" "dev-box-dns-record-cloudflare" {
+  allow_overwrite = true
+  comment = format("DNS record for %s", azurerm_linux_virtual_machine.dev-box.name)
+  type = "A"
+  name = azurerm_linux_virtual_machine.dev-box.name
+  zone_id = var.cloudflare_zone_id
+  ttl = 60
+}
+
+resource "azurerm_dns_a_record" "dev-box-dns-record-azure" {
+  resource_group_name = azurerm_resource_group.dev-rg.name
+  name = "dev-box"
+  zone_name = azurerm_private_dns_zone.phz.name
+  ttl = 120
+  records = [azurerm_network_interface.nif-dev-box.private_ip_address]
+}
