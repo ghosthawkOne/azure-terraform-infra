@@ -132,12 +132,5 @@ resource "cloudflare_record" "dev-box-dns-record-cloudflare" {
   name = azurerm_linux_virtual_machine.dev-box.name
   zone_id = var.cloudflare_zone_id
   ttl = 60
-}
-
-resource "azurerm_dns_a_record" "dev-box-dns-record-azure" {
-  resource_group_name = azurerm_resource_group.dev-rg.name
-  name = "dev-box"
-  zone_name = azurerm_private_dns_zone.phz.name
-  ttl = 120
-  records = [azurerm_network_interface.nif-dev-box.private_ip_address]
+  content = azurerm_public_ip.ip-dev-box.ip_address
 }

@@ -61,8 +61,3 @@ resource "azurerm_ssh_public_key" "ssh-pub-key" {
   name = "global-ssh-key"
   resource_group_name = azurerm_resource_group.dev-rg.name
 }
-
-resource "azurerm_private_dns_zone" "phz" {
-  name = "servrfarm.tech"
-  resource_group_name = azurerm_resource_group.dev-rg.name
-}
