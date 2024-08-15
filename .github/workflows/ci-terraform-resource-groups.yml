@@ -169,8 +169,8 @@ jobs:
       - name: Produce an ansible-style inventory
         id: ansible-inventory
         run: |
-          git_repo_dir=$(git rev-parse --show-toplevel)
-          ansible_inventory_home="$git_repo_dir/ansible/global/inventory"
+          target_dir="ansible/global/inventory"
+          ansible_inventory_home="$target_dir"
           mkdir -p "$ansible_inventory_home"
           inventory_path="$ansible_inventory_home/hosts.yml"
           terragrunt output -json ansible_inventory | jq -r '.' > $inventory_path
