@@ -162,6 +162,10 @@ jobs:
         working-directory: terraform/global
         run: |
           terragrunt apply -auto-approve
+      - name: Setup JQ
+        uses: dcarbone/install-jq-action@v2
+        with:
+          version: 1.7
       - name: Produce an ansible-style inventory
         id: ansible-inventory
         run: |
