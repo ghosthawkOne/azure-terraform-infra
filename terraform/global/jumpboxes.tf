@@ -134,3 +134,23 @@ resource "cloudflare_record" "dev-box-dns-record-cloudflare" {
   ttl = 60
   content = azurerm_public_ip.ip-dev-box.ip_address
 }
+
+locals {
+  vm_name = azurerm_linux_virtual_machine.dev-box.name
+  vm_ipv4_address = azurerm_public_ip.ip-dev-box.ip_address
+  vm_username = azurerm_linux_virtual_machine.dev-box.admin_username
+}
+
+output "ansible_inventory" {
+  value = yamlencode({
+    all = {
+      hosts = {
+        "${azurerm_linux_virtual_machine.dev-box.name}" = {
+          ansible_host                  = azurerm_public_ip.ip-dev-box.ip_address
+          ansible_user                  = azurerm_linux_virtual_machine.dev-box.admin_username
+          ansible_port                  = 22
+        }
+      }
+    }
+  })
+}
