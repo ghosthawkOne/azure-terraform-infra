@@ -132,7 +132,9 @@ resource "cloudflare_record" "dev-box-dns-record-cloudflare" {
   name = azurerm_linux_virtual_machine.dev-box.name
   zone_id = var.cloudflare_zone_id
   ttl = 60
-  content = azurerm_public_ip.ip-dev-box.ip_address
+  data {
+    content = azurerm_public_ip.ip-dev-box.ip_address
+  }
 }
 
 locals {
