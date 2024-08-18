@@ -102,22 +102,6 @@ resource "azurerm_linux_virtual_machine" "dev-box" {
   }
 }
 
-resource "azurerm_managed_disk" "dev-box-storage" {
-  name = "dev-box-storage"
-  resource_group_name = azurerm_resource_group.dev-rg.name
-  location = azurerm_resource_group.dev-rg.location
-  storage_account_type = "Standard_LRS"
-  create_option = "Empty"
-  disk_size_gb = 32
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "attach-dev-box-storage-to-dev-box" {
-  managed_disk_id = azurerm_managed_disk.dev-box-storage.id
-  virtual_machine_id = azurerm_linux_virtual_machine.dev-box.id
-  lun = 10
-  caching = "ReadWrite"
-}
-
 variable "cloudflare_zone_id" {
   type = string
   sensitive = true
