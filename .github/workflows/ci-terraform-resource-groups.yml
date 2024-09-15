@@ -162,28 +162,3 @@ jobs:
         working-directory: terraform/global
         run: |
           terragrunt apply -auto-approve
-      - name: Setup JQ
-        uses: dcarbone/install-jq-action@v2
-        with:
-          version: 1.7
-      - name: Produce an ansible-style inventory
-        id: ansible-inventory
-        run: |
-          target_dir="ansible/global/inventory"
-          ansible_inventory_home="$target_dir"
-          mkdir -p "$ansible_inventory_home"
-          inventory_path="$ansible_inventory_home/hosts.yml"
-          terragrunt output -json ansible_inventory | jq -r '.' > $inventory_path
-          echo "ansible_inventory=$inventory_path" >> $GITHUB_OUTPUT
-          echo "ansible_update_branch=ansible/global/inventory/update-$(date +%FT%H%M%S)" >> GITHUB_OUTPUT
-      - name: Check-in inventory
-        uses: peter-evans/create-pull-request@v6.1.0
-        id: create-pr
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: ${{ steps.ansible-inventory.outputs.ansible_inventory }}
-          branch: ${{ steps.ansible-inventory.outputs.ansible_update_branch }}
-          commit-message: |
-            Add/Update ${{ steps.ansible-inventory.outputs.ansible_inventory }}
-          title: |
-            Add/Update ${{ steps.ansible-inventory.outputs.ansible_inventory }}
